@@ -40,6 +40,10 @@ func CreatePerson(chromosome []int) Person {
 func main() {
 	population := make([]Person, 10)
 	rand.Seed(time.Now().Unix())
+	fmt.Println("matric number: ", CurPos)
+	fmt.Println("MutationThreshold: ", MutationThreshold)
+	fmt.Println("EvolutionNum: ", EvolutionNum)
+	fmt.Println("MaxMating: ", MaxMating)
 	for pos := range population {
 		gene := make([]int, 3)
 		for p := range gene {
@@ -48,14 +52,12 @@ func main() {
 		cur := CreatePerson(gene)
 		population[pos] = cur
 	}
-	//PrintInfo(population)
 	for i := 0; i < EvolutionNum; i++ {
 		Generation++
 		newPopulation := make([]Person, 10)
 		sum := GetFitnessSum(population)
 		preSum := []float64{}
 		temp := 0.0
-		PrintInfo(population)
 		for pos := range population {
 			population[pos].RankFit = 1 / (population[pos].Fitness * sum)
 			temp += population[pos].RankFit
@@ -65,12 +67,18 @@ func main() {
 			PrintInfo(population)
 			break
 		}
-		for wedding := 0; wedding < MaxMating; wedding++ {
+		PrintInfo(population)
+		for mating := 0; mating < MaxMating; mating++ {
 			parent1 := population[GetParent(preSum)]
 			parent2 := population[GetParent(preSum)]
 			child1, child2 := GetChildren(parent1, parent2)
 			population = append(population, child1)
 			population = append(population, child2)
+			fmt.Println("mating ", mating+1)
+			fmt.Println("parent 1 chromosome: ", parent1.BinChromosome)
+			fmt.Println("parent 2 chromosome: ", parent2.BinChromosome)
+			fmt.Println("child 2 chromosome: ", child1.BinChromosome)
+			fmt.Println("child 2 chromosome: ", child1.BinChromosome)
 		}
 		sort.Slice(population, func(i, j int) bool {
 			return population[i].Fitness < population[j].Fitness
@@ -164,11 +172,11 @@ func GetFitnessSum(p []Person) float64 {
 }
 
 func PrintInfo(p []Person) {
-	fmt.Println(">>>>>generation ", Generation-1, " begin<<<<<")
+	fmt.Println(">>>>>  generation ", Generation-1, " list  <<<<<")
 	for pos := range p {
 		fmt.Printf("%+v\n", p[pos])
 	}
-	fmt.Println(">>>>>generation ", Generation-1, " end<<<<<")
+	fmt.Println(">>>>>  generation ", Generation-1, " list  <<<<<")
 }
 
 func Str2DEC(s string) (num int) {
