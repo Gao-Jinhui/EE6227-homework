@@ -77,8 +77,8 @@ func main() {
 			fmt.Println("mating ", mating+1)
 			fmt.Println("parent 1 chromosome: ", parent1.BinChromosome)
 			fmt.Println("parent 2 chromosome: ", parent2.BinChromosome)
-			fmt.Println("child 2 chromosome: ", child1.BinChromosome)
-			fmt.Println("child 2 chromosome: ", child1.BinChromosome)
+			fmt.Println("child 1 chromosome: ", child1.BinChromosome)
+			fmt.Println("child 2 chromosome: ", child2.BinChromosome)
 		}
 		sort.Slice(population, func(i, j int) bool {
 			return population[i].Fitness < population[j].Fitness
