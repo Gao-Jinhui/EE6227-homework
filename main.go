@@ -29,10 +29,10 @@ type Person struct {
 func CreatePerson(chromosome []int) Person {
 	p := Person{Chromosome: chromosome, NormalChromosome: make([]float64, 3)}
 	for pos := range p.Chromosome {
-		p.NormalChromosome[pos] = float64(p.Chromosome[pos])/1023*40 - 20
+		p.NormalChromosome[pos] = Decimal(float64(p.Chromosome[pos])/1023*40 - 20)
 		p.BinChromosome = append(p.BinChromosome, string(Dec2Bin(p.Chromosome[pos])))
 	}
-	p.Fitness = GetFitness(p.NormalChromosome)
+	p.Fitness = Decimal(GetFitness(p.NormalChromosome))
 	p.Generation = Generation
 	return p
 }
@@ -59,7 +59,7 @@ func main() {
 		preSum := []float64{}
 		temp := 0.0
 		for pos := range population {
-			population[pos].RankFit = 1 / (population[pos].Fitness * sum)
+			population[pos].RankFit = Decimal4(1 / (population[pos].Fitness * sum))
 			temp += population[pos].RankFit
 			preSum = append(preSum, temp)
 		}
@@ -173,8 +173,15 @@ func GetFitnessSum(p []Person) float64 {
 
 func PrintInfo(p []Person) {
 	fmt.Println(">>>>>  generation ", Generation-1, " list  <<<<<")
+	fmt.Println("Chromosome        BinChromosome                 NormalChromosome   Fitness   RankFit   Generation")
 	for pos := range p {
-		fmt.Printf("%+v\n", p[pos])
+		//fmt.Printf("%+v\n", p[pos])
+		fmt.Print(p[pos].Chromosome, "   ")
+		fmt.Print(p[pos].BinChromosome, "   ")
+		fmt.Print(p[pos].NormalChromosome, "   ")
+		fmt.Print(p[pos].Fitness, "   ")
+		fmt.Print(p[pos].RankFit, "   ")
+		fmt.Print(p[pos].Generation, "\n")
 	}
 	fmt.Println(">>>>>  generation ", Generation-1, " list  <<<<<")
 }
@@ -185,4 +192,14 @@ func Str2DEC(s string) (num int) {
 		num += (int(s[l-i-1]) & 0xf) << uint8(i)
 	}
 	return
+}
+
+func Decimal(num float64) float64 {
+	num, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", num), 64)
+	return num
+}
+
+func Decimal4(num float64) float64 {
+	num, _ = strconv.ParseFloat(fmt.Sprintf("%.4f", num), 64)
+	return num
 }
